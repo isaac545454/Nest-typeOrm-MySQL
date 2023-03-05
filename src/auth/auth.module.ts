@@ -1,19 +1,20 @@
 import { forwardRef, Module } from "@nestjs/common";
 import { JwtModule } from "@nestjs/jwt";
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { FileModule } from "src/file/file.module";
-import { UserEntity } from "src/User/entity/user.entity";
-import { UserModule } from "src/User/user.module";
+import { users } from "../User/entity/user.entity";
+import { FileModule } from "../file/file.module";
+import { UserModule } from "../User/user.module";
+
 import { AuthController } from "./auth.controller";
 import { AuhtService } from "./auth.service";
 
 @Module({
   imports: [
     JwtModule.register({
-      secret: process.env.SECRET,
+      secret: String(process.env.SECRET),
     }),
     forwardRef(() => UserModule),
-    TypeOrmModule.forFeature([UserEntity]),
+    TypeOrmModule.forFeature([users]),
     FileModule,
   ],
   controllers: [AuthController],

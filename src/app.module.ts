@@ -9,7 +9,7 @@ import { ConfigModule } from "@nestjs/config";
 import { MailerModule } from "@nestjs-modules/mailer";
 import { PugAdapter } from "@nestjs-modules/mailer/dist/adapters/pug.adapter";
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { UserEntity } from "./User/entity/user.entity";
+import { users } from "./User/entity/user.entity";
 @Module({
   imports: [
     ConfigModule.forRoot(),
@@ -43,10 +43,10 @@ import { UserEntity } from "./User/entity/user.entity";
       type: "mysql",
       host: process.env.DB_HOST,
       port: Number(process.env.DB_PORT),
-      username: process.env.DB_NAME,
+      username: process.env.DB_USER,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_DATABASE,
-      entities: [UserEntity],
+      entities: [users],
       synchronize: process.env.ENV === "develop",
     }),
   ],

@@ -10,9 +10,7 @@ import {
   UseGuards,
   UseInterceptors,
 } from "@nestjs/common";
-import { User } from "src/decorators/user-decators";
-import { AuthGuard } from "src/guards/auth.guard";
-import { UserService } from "src/User/user.service";
+
 import { AuhtService } from "./auth.service";
 import { AuthForgetDTO } from "./dto/auth-forget-dto";
 import { AuthLoginDTO } from "./dto/auth-login-dto";
@@ -20,7 +18,10 @@ import { FileInterceptor, FilesInterceptor } from "@nestjs/platform-express";
 import { AuthRegisterDTO } from "./dto/auth-register-dto";
 import { AuthResetDTO } from "./dto/auth-reset-dto";
 import { join } from "path";
-import { FileService } from "src/file/file.service";
+import { UserService } from "../User/user.service";
+import { FileService } from "../file/file.service";
+import { AuthGuard } from "../guards/auth.guard";
+import { User } from "../decorators/user-decators";
 
 @Controller("auth")
 export class AuthController {

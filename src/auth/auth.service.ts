@@ -4,10 +4,15 @@ import {
   UnauthorizedException,
 } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
-import { UserService } from "src/User/user.service";
+
 import { AuthRegisterDTO } from "./dto/auth-register-dto";
 import * as brypt from "bcrypt";
 import { MailerService } from "@nestjs-modules/mailer";
+
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
+import { users } from "../User/entity/user.entity";
+import { UserService } from "../User/user.service";
 
 @Injectable()
 export class AuhtService {
@@ -15,12 +20,13 @@ export class AuhtService {
   private issuer = "login";
   constructor(
     private readonly jwtservice: JwtService,
-
+    @InjectRepository(users)
+    private userRepository: Repository<users>,
     private readonly userService: UserService,
     private readonly mailer: MailerService
   ) {}
 
-  createToken(user: User) {
+  createToken(user: users) {
     return {
       acessTokem: this.jwtservice.sign(
         {
@@ -59,11 +65,9 @@ export class AuhtService {
   }
 
   async login(email: string, password: string) {
-    const user = await this.prisma.user.findFirst({
-      where: {
-        email,
-      },
-    });
+    const user = await this.userRepository.findOne({ where: { email: email } });
+
+    console.log("email" + user);
 
     if (!user) throw new UnauthorizedException("Email ou senha incorretos.");
 
@@ -73,7 +77,7 @@ export class AuhtService {
     return this.createToken(user);
   }
   async forget(email: string) {
-    const user = await this.prisma.user.findFirst({
+    const user = await this.userRepository.findOne({
       where: {
         email,
       },
@@ -110,7 +114,6 @@ export class AuhtService {
         issuer: "forget",
         audience: this.audience,
       });
-      const id = idToken;
 
       if (isNaN(Number(idToken))) {
         throw new BadRequestException("Token invalido");
@@ -119,14 +122,11 @@ export class AuhtService {
       const salt = await brypt.genSalt();
       password = await brypt.hash(password, salt);
 
-      const user = await this.prisma.user.update({
-        where: {
-          id: id,
-        },
-        data: {
-          password,
-        },
+      await this.userRepository.update(Number(idToken), {
+        password,
       });
+
+      const user = await this.userService.findOne(Number(idToken));
       return this.createToken(user);
     } catch (error) {
       throw new BadRequestException(error);
@@ -135,7 +135,8 @@ export class AuhtService {
   }
 
   async register(data: AuthRegisterDTO) {
+    console.log("password" + data.password);
     const user = await this.userService.create(data);
-    return this.createToken(user as User);
+    return this.createToken(user as users);
   }
 }
