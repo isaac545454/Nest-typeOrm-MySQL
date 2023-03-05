@@ -7,6 +7,15 @@
       {
         "include": "template/**/**"
       }
+    ],
+    "plugins": [
+      {
+        "name": "@nestjs/swagger",
+        "options": {
+          "classValidatorShim": false,
+          "introspectComments": true
+        }
+      }
     ]
   }
 }

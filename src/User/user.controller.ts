@@ -9,6 +9,7 @@ import {
   UseGuards,
   UseInterceptors,
 } from "@nestjs/common";
+import { ApiBody, ApiParam, ApiTags } from "@nestjs/swagger";
 import { paramsId } from "../decorators/params-id-decorators";
 import { Roles } from "../decorators/role-decorators";
 import { Role } from "../enums/role.enum";
@@ -24,11 +25,13 @@ import { UserService } from "./user.service";
 @UseGuards(AuthGuard, RoleGuard)
 @UseInterceptors(LogInterceptor)
 @Roles(Role.User)
+@ApiTags("users")
 @Controller("users")
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post()
+  @ApiBody({ type: CreateUserDTO })
   async create(@Body() data: CreateUserDTO) {
     return this.userService.create(data);
   }
@@ -44,11 +47,13 @@ export class UserController {
   }
 
   @Put(":id")
+  @ApiBody({ type: UpdateUserDTO })
   async update(@paramsId() id: number, @Body() data: UpdateUserDTO) {
     return this.userService.update(id, data);
   }
 
   @Patch(":id")
+  @ApiBody({ type: PathUserDTO })
   async updatePartial(@paramsId() id: number, @Body() Body: PathUserDTO) {
     return this.userService.updatePartial(id, Body);
   }
