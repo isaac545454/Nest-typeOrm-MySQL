@@ -122,7 +122,12 @@ export class UserService {
 
   async delete(id: number) {
     await this.exists(id);
-    return this.userRepository.delete(id);
+    try {
+      await this.userRepository.delete(id);
+      return true;
+    } catch (error) {
+      throw new BadRequestException("houve um erro");
+    }
   }
 
   async exists(id: number) {

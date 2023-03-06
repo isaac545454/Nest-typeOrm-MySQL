@@ -1,10 +1,10 @@
 import { Test, TestingModule } from "@nestjs/testing";
-import { Role } from "../enums/role.enum";
 import { userCreateDTOMock } from "../testing/user-create-dto.mock";
 import { UserUpdatePutDTOMock } from "../testing/user-update-put.mock";
 import { ListUserEntity } from "../testing/user-entity-list.mock";
 import { userRepositoryMock } from "../testing/user-repository.mock";
 import { UserService } from "./user.service";
+import { UserUpdatePathDTOMock } from "../testing/user-update-path.mock";
 
 describe("UserService", () => {
   let userService: UserService;
@@ -44,8 +44,16 @@ describe("UserService", () => {
     });
 
     test(" method update partial", async () => {
-      const result = await userService.findOne(1);
+      const result = await userService.updatePartial(1, UserUpdatePathDTOMock);
       expect(result).toEqual(ListUserEntity[0]);
+    });
+  });
+
+  describe("delete", () => {
+    test("method delete", async () => {
+      const results = await userService.delete(1);
+
+      expect(results).toEqual(true);
     });
   });
 });
