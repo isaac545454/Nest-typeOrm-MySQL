@@ -55,14 +55,19 @@ export class UserService {
     const salt = await brypt.genSalt();
 
     password = await brypt.hash(password, salt);
+    try {
+      await this.userRepository.update(id, {
+        email,
+        password,
+        name,
+        role,
+        birthAt: birthAt ? String(new Date(birthAt)) : null,
+      });
 
-    return this.userRepository.update(id, {
-      email,
-      password,
-      name,
-      role,
-      birthAt: birthAt ? String(new Date(birthAt)) : null,
-    });
+      return this.findOne(id);
+    } catch (error) {
+      throw new BadRequestException("houve um erro");
+    }
   }
 
   async updatePartial(
@@ -77,27 +82,31 @@ export class UserService {
       data.birthAt = new Date(birthAt);
     }
     if (name) {
-      data.birthAt = name;
+      data.name = name;
     }
     if (email) {
-      data.birthAt = email;
+      data.email = email;
     }
     if (password) {
       const salt = await brypt.genSalt();
 
       password = await brypt.hash(password, salt);
-      data.birthAt = password;
+      data.password = password;
     }
     if (role) {
-      data.birthAt = role;
+      data.role = role;
     }
-
-    return this.userRepository.update(id, {
-      email,
-      password,
-      name,
-      birthAt: birthAt ? String(new Date(birthAt)) : null,
-    });
+    try {
+      await this.userRepository.update(id, {
+        email,
+        password,
+        name,
+        birthAt: birthAt ? String(new Date(birthAt)) : null,
+      });
+      return this.findOne(id);
+    } catch (error) {
+      throw new BadRequestException("houve um erro");
+    }
   }
 
   async findAll() {
