@@ -9,6 +9,7 @@ import { userCreateDTOMock } from "../testing/user-create-dto.mock";
 import { ListUserEntity } from "../testing/user-entity-list.mock";
 import { UserUpdatePutDTOMock } from "../testing/user-update-put.mock";
 import { UserUpdatePathDTOMock } from "../testing/user-update-path.mock";
+import { Role } from "../enums/role.enum";
 
 describe("UserController", () => {
   let userController: UserController;
@@ -70,6 +71,16 @@ describe("UserController", () => {
     test("method delete", async () => {
       const results = await userController.delete(1);
       expect(results).toEqual(true);
+    });
+  });
+
+  describe("Teste da aplicação dos Giards neste controle", () => {
+    test("se os guards estão aplicados", () => {
+      const guards = Reflect.getMetadata("__guards__", UserController);
+
+      expect(guards.length).toEqual(2);
+      expect(new guards[0]()).toBeInstanceOf(AuthGuard);
+      expect(new guards[1]()).toBeInstanceOf(RoleGuard);
     });
   });
 });
