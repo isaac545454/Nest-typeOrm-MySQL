@@ -1,5 +1,6 @@
 import { getRepositoryToken } from "@nestjs/typeorm";
 import { users } from "../User/entity/user.entity";
+import { acessToken } from "./token.mock";
 import { ListUserEntity } from "./user-entity-list.mock";
 
 export const userRepositoryMock = {
@@ -11,6 +12,7 @@ export const userRepositoryMock = {
     find: jest.fn().mockResolvedValue(ListUserEntity),
     findOneBy: jest.fn().mockResolvedValue(ListUserEntity[0]),
     delete: jest.fn(),
+    findOne: jest.fn().mockReturnValue(ListUserEntity[0]),
     count: jest.fn().mockResolvedValue(true),
   },
 };

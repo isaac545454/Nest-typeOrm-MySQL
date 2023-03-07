@@ -1,14 +1,15 @@
 import { UserService } from "../User/user.service";
+import { ListUserEntity } from "./user-entity-list.mock";
 
 export const UserServiceMock = {
   provide: UserService,
   useValue: {
-    create: jest.fn(),
-    update: jest.fn(),
-    updatePartial: jest.fn(),
-    findAll: jest.fn(),
-    findOne: jest.fn(),
-    delete: jest.fn(),
-    exists: jest.fn(),
+    create: jest.fn().mockResolvedValue(ListUserEntity[0]),
+    update: jest.fn().mockResolvedValue(ListUserEntity[0]),
+    updatePartial: jest.fn().mockResolvedValue(ListUserEntity[0]),
+    findAll: jest.fn().mockResolvedValue(ListUserEntity),
+    findOne: jest.fn().mockResolvedValue(ListUserEntity[0]),
+    delete: jest.fn().mockResolvedValue(true),
+    exists: jest.fn().mockResolvedValue(true),
   },
 };

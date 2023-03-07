@@ -24,8 +24,8 @@ import { users } from "./User/entity/user.entity";
         host: "smtp.ethereal.email",
         port: 587,
         auth: {
-          user: "tyler.renner@ethereal.email",
-          pass: "3Mg3NBWhUrJe1vKnXE",
+          user: "corene.heller0@ethereal.email",
+          pass: "dCGRu9VjXjjYkTe5qg",
         },
       },
       defaults: {

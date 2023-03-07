@@ -67,8 +67,6 @@ export class AuhtService {
   async login(email: string, password: string) {
     const user = await this.userRepository.findOne({ where: { email: email } });
 
-    console.log("email" + user);
-
     if (!user) throw new UnauthorizedException("Email ou senha incorretos.");
 
     if (!(await brypt.compare(password, user.password))) {
@@ -110,32 +108,33 @@ export class AuhtService {
   }
   async reset(password: string, token: string) {
     try {
-      const { id: idToken } = this.jwtservice.verify(token, {
+      const data = await this.jwtservice.verify(token, {
         issuer: "forget",
         audience: this.audience,
       });
 
-      if (isNaN(Number(idToken))) {
+      if (isNaN(Number(data.id))) {
         throw new BadRequestException("Token invalido");
       }
 
       const salt = await brypt.genSalt();
       password = await brypt.hash(password, salt);
 
-      await this.userRepository.update(Number(idToken), {
+      await this.userRepository.update(Number(data.id), {
         password,
       });
 
-      const user = await this.userService.findOne(Number(idToken));
+      const user = await this.userService.findOne(Number(data.id));
       return this.createToken(user);
     } catch (error) {
+      console.log(error);
       throw new BadRequestException(error);
     }
     //TODO:token valido?
   }
 
   async register(data: AuthRegisterDTO) {
-    console.log("password" + data.password);
+    delete data.role;
     const user = await this.userService.create(data);
     return this.createToken(user as users);
   }

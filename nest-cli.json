@@ -5,7 +5,8 @@
   "compilerOptions": {
     "assets": [
       {
-        "include": "template/**/**"
+        "include": "template/**/**",
+        "outDir": "dist/src"
       }
     ],
     "plugins": [
