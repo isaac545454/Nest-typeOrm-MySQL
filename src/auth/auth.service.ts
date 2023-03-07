@@ -28,7 +28,7 @@ export class AuhtService {
 
   createToken(user: users) {
     return {
-      acessTokem: this.jwtservice.sign(
+      acessToken: this.jwtservice.sign(
         {
           id: user.id,
           name: user.name,

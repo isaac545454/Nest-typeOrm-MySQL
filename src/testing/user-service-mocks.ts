@@ -1,7 +1,7 @@
-import { JwtService } from "@nestjs/jwt";
+import { UserService } from "../User/user.service";
 
 export const UserServiceMock = {
-  provide: JwtService,
+  provide: UserService,
   useValue: {
     create: jest.fn(),
     update: jest.fn(),
