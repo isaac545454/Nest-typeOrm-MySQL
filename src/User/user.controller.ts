@@ -24,7 +24,7 @@ import { UserService } from "./user.service";
 
 @UseGuards(AuthGuard, RoleGuard)
 @UseInterceptors(LogInterceptor)
-@Roles(Role.User)
+@Roles(Role.admin)
 @ApiTags("users")
 @Controller("users")
 export class UserController {
