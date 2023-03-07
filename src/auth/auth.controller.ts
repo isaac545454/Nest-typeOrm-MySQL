@@ -83,14 +83,8 @@ export class AuthController {
     )
     photo: Express.Multer.File
   ) {
-    const path = join(
-      __dirname,
-      "../",
-      "../",
-      "storage",
-      "photos",
-      `photos-${user.id}.jpeg`
-    );
+    const path = `photos-${user.id}.jpeg`;
+
     try {
       this.fileService.upload(photo, path);
     } catch (error) {
