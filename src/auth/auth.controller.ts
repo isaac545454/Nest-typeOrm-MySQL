@@ -17,19 +17,17 @@ import { AuthLoginDTO } from "./dto/auth-login-dto";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { AuthRegisterDTO } from "./dto/auth-register-dto";
 import { AuthResetDTO } from "./dto/auth-reset-dto";
-import { join } from "path";
-import { UserService } from "../User/user.service";
 import { FileService } from "../file/file.service";
 import { AuthGuard } from "../guards/auth.guard";
 import { User } from "../decorators/user-decators";
 import { ApiBody, ApiTags } from "@nestjs/swagger";
 import { AuthMeDTO } from "./dto/auth-me-dto";
+import { users } from "../User/entity/user.entity";
 
 @ApiTags("auth")
 @Controller("auth")
 export class AuthController {
   constructor(
-    private readonly userService: UserService,
     private readonly authService: AuhtService,
     private readonly fileService: FileService
   ) {}
@@ -60,15 +58,15 @@ export class AuthController {
   @UseGuards(AuthGuard)
   @Post("me")
   @ApiBody({ type: AuthMeDTO })
-  async me(@User("email") user: AuthMeDTO) {
-    return { user: user };
+  async me(@User() user) {
+    return user;
   }
 
   @UseInterceptors(FileInterceptor("file"))
   @UseGuards(AuthGuard)
   @Post("photo")
   async upload(
-    @User() user,
+    @User() user: users,
     @UploadedFile(
       new ParseFilePipe({
         validators: [
