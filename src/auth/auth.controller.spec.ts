@@ -56,7 +56,7 @@ describe("UserController", () => {
       const result = await authController.me(ListUserEntity[0]);
       expect(result).toEqual(ListUserEntity[0]);
     });
-    test("method me", async () => {
+    test("method upload", async () => {
       const result = await authController.upload(
         ListUserEntity[0],
         await getPhoto()
